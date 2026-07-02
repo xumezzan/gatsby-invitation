@@ -646,6 +646,45 @@ body.intro-lock{ overflow:hidden; }
 .open-inv:active{ transform:scale(.97); }
 .open-inv:focus-visible{ outline:2px solid var(--gold); outline-offset:5px; }
 
+/* ---------- КНОПКА RSVP (финал) — обрамлённая, в стиле open-inv, без пульса интро ---------- */
+.rsvp-eyebrow{
+  font-family:'Cinzel',serif;
+  font-size:min(3vw,.74rem);
+  letter-spacing:.42em; text-indent:.42em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-top:40px;
+}
+.rsvp-btn{
+  display:inline-block;
+  margin-top:18px;
+  cursor:pointer;
+  font-family:'Cinzel',serif;
+  font-size:min(3.4vw,.92rem);
+  letter-spacing:.42em; text-indent:.42em;
+  text-transform:uppercase;
+  color:var(--gold-soft);
+  text-decoration:none;
+  background:rgba(212,175,55,.07);
+  border:1px solid rgba(212,175,55,.6);
+  padding:18px 40px 16px;
+  position:relative;
+  transition:background .3s ease, box-shadow .3s ease, border-color .3s ease, color .3s ease, transform .12s ease;
+}
+.rsvp-btn::before{ /* вторая деко-линия внутри, как у остальных рамок сайта */
+  content:""; position:absolute; inset:4px;
+  border:1px solid rgba(212,175,55,.3);
+  pointer-events:none;
+}
+.rsvp-btn:hover{
+  background:rgba(212,175,55,.16);
+  border-color:var(--gold);
+  box-shadow:0 0 34px rgba(212,175,55,.42);
+  color:#fff8e2;
+}
+.rsvp-btn:active{ transform:scale(.97); }
+.rsvp-btn:focus-visible{ outline:2px solid var(--gold); outline-offset:5px; }
+
 /* «дымчатое стекло» между интро и страницей — вспыхивает на мгновение перехода */
 #glass{
   position:fixed; inset:0; z-index:950;
@@ -867,6 +906,16 @@ body.intro-lock{ overflow:hidden; }
     </h2>
     <div class="finale-see script gold-text" data-i18n="see">See you</div>
     <div class="finale-date">12 . 07 . 2026</div>
+
+    <!-- ===== RSVP =====
+         Кнопка ведёт на Google Форму. Вставьте ссылку формы в href ниже
+         (замените RSVP-ССЫЛКА на forms.gle/... или docs.google.com/forms/...).
+         Инструкция по созданию формы — в README.md. -->
+    <div class="rsvp-eyebrow" data-i18n="rsvpKindly">Kindly respond</div>
+    <a class="rsvp-btn"
+       href="RSVP-ССЫЛКА"
+       target="_blank" rel="noopener"
+       data-i18n="rsvp">Confirm your presence</a>
   </div>
 </section>
 
@@ -935,6 +984,8 @@ var I18N = {
     dressNote:   "Sequins, feathers &amp; pearls are highly encouraged",
     quote:       "<span>A little party</span><span>never killed</span><span>nobody</span>",
     see:         "See you",
+    rsvpKindly:  "Kindly respond",
+    rsvp:        "Confirm your presence",
     footer:      "12 . 07 . 2026 · Miras · Tashkent"
   },
   ru: {
@@ -968,6 +1019,8 @@ var I18N = {
     dressNote:   "Пайетки, перья и жемчуг — горячо приветствуются",
     quote:       "<span>Небольшая вечеринка</span><span>ещё никого</span><span>не убила</span>",
     see:         "До встречи",
+    rsvpKindly:  "Просим ответить",
+    rsvp:        "Подтвердить участие",
     footer:      "12 . 07 . 2026 · Miras · Ташкент"
   }
 };
