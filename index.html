@@ -7,7 +7,7 @@
 
 <!-- OG-теги для красивого превью в Telegram / WhatsApp -->
 <meta property="og:title" content="Latifa’s Great Birthday Celebration">
-<meta property="og:description" content="12 July 2026 · Miras, Tashkent · Dress code: Great Gatsby — gold, silver & black. A little party never killed nobody!">
+<meta property="og:description" content="12 July 2026 · Miras, Tashkent · Dress code: Great Gatsby — gold, silver & black. A little party never killed somebody!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://gatsby-invitation-production.up.railway.app/">
 <!-- og-image.png раздаётся рядом с index.html (в Docker-образ кладётся вместе — см. Dockerfile).
@@ -139,7 +139,9 @@ html[lang="ru"] .s2-eyebrow{
   line-height:1.5;
 }
 html[lang="ru"] .s2-city,
-html[lang="ru"] .s2-cd-label{
+html[lang="ru"] .s2-cd-label,
+html[lang="ru"] .s2-when-label,
+html[lang="ru"] .s2-venue-label{
   letter-spacing:.28em; text-indent:.28em;
   padding:0 12px;
 }
@@ -263,13 +265,48 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
   letter-spacing:.08em;
   text-indent:.08em;
 }
+/* время начала — акцентно, как вторичная крупная цифра (гость сразу видит «когда») */
+.s2-when{
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  margin-top:30px;
+}
+.s2-when-label{
+  font-family:'Cinzel','Playfair Display',serif;
+  font-size:min(2.8vw,.72rem);
+  letter-spacing:.5em; text-indent:.5em;
+  text-transform:uppercase;
+  color:var(--silver); opacity:.85;
+}
+.s2-time{
+  font-family:'Italiana','Playfair Display',serif;
+  font-size:min(15vw,4.4rem);
+  line-height:1;
+  letter-spacing:.06em; text-indent:.06em;
+}
+/* подпись «место проведения» с деко-линиями — чтобы «Miras» читался как локация, а не просто слово */
+.s2-venue-label{
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  font-family:'Cinzel','Playfair Display',serif;
+  font-size:min(2.8vw,.72rem);
+  letter-spacing:.42em; text-indent:.42em;
+  text-transform:uppercase;
+  color:var(--gold-soft);
+  margin-top:34px; margin-bottom:2px;
+}
+.s2-venue-label::before,.s2-venue-label::after{
+  content:"";
+  flex:0 0 clamp(22px,6vw,50px);
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(212,175,55,.6));
+}
+.s2-venue-label::after{ background:linear-gradient(90deg, rgba(212,175,55,.6), transparent); }
 .s2-venue{
   font-family:'Italiana','Playfair Display',serif;
   font-size:min(11vw,3.4rem);
   letter-spacing:.38em;
   text-indent:.38em;
   text-transform:uppercase;
-  margin-top:36px;
+  margin-top:2px;      /* верхний отступ теперь даёт .s2-venue-label */
 }
 .s2-city{
   font-family:'Cinzel','Playfair Display',serif;
@@ -951,10 +988,19 @@ body.intro-lock{ overflow:hidden; }
     <div class="s2-day gold-text" style="--dl:.9s">12</div>
     <div class="s2-month" style="--dl:1.1s" data-i18n="month">July</div>
     <div class="s2-year gold-text" style="--dl:1.25s">2026</div>
-    <div class="s2-venue gold-text" style="--dl:1.45s">Miras</div>
-    <!-- Адрес зала и время: допишите в строку ниже, когда подтвердятся (и EVENT_DATE внизу файла) -->
-    <div class="s2-city" style="--dl:1.6s" data-i18n="city">Tashkent &middot; Sunday evening</div>
-    <div class="s2-cd" style="--dl:1.8s">
+
+    <!-- Время начала. Меняется ЗДЕСЬ и в EVENT_DATE внизу файла (сейчас 18:00) -->
+    <div class="s2-when" style="--dl:1.4s">
+      <span class="s2-when-label" data-i18n="doors">Doors at</span>
+      <span class="s2-time gold-text">18:00</span>
+    </div>
+
+    <!-- Место проведения: подпись-лейбл + название зала, чтобы «Miras» читался как локация -->
+    <div class="s2-venue-label" style="--dl:1.55s" data-i18n="venueLabel">The Venue</div>
+    <div class="s2-venue gold-text" style="--dl:1.65s">Miras</div>
+    <!-- Адрес зала: допишите город/адрес в строку city ниже, когда подтвердится -->
+    <div class="s2-city" style="--dl:1.78s" data-i18n="city">Tashkent &middot; Sunday evening</div>
+    <div class="s2-cd" style="--dl:1.95s">
       <span class="s2-cd-label" id="countdown-title" data-i18n="cdTitle">The party begins in</span>
       <!-- Дата и время события задаются в JS внизу файла (EVENT_DATE) -->
       <div class="cd-line" id="countdown" aria-live="polite">
@@ -967,7 +1013,7 @@ body.intro-lock{ overflow:hidden; }
         <span class="cd-cell"><b id="cd-s">00</b><i data-i18n="sec">Sec</i></span>
       </div>
     </div>
-    <div class="scroll-hint" style="--dl:2s" data-i18n="scroll">Scroll</div>
+    <div class="scroll-hint" style="--dl:2.1s" data-i18n="scroll">Scroll</div>
   </div>
 </header>
 
@@ -1047,7 +1093,7 @@ body.intro-lock{ overflow:hidden; }
     </svg>
 
     <h2 class="finale-quote gold-text" data-i18n-html="quote">
-      <span>A little party</span><span>never killed</span><span>nobody</span>
+      <span>A little party</span><span>never killed</span><span>somebody</span>
     </h2>
     <div class="finale-see script gold-text" data-i18n="see">See you</div>
     <div class="finale-date">12 . 07 . 2026</div>
@@ -1122,6 +1168,8 @@ var I18N = {
     s2Script:    "Latifa’s",
     s2Eyebrow:   "Great Birthday Celebration",
     month:       "July",
+    doors:       "Doors at",
+    venueLabel:  "The Venue",
     city:        "Tashkent · Sunday evening",
     cdTitle:     "The party begins in",
     cdParty:     "It’s party time!",
@@ -1145,7 +1193,7 @@ var I18N = {
     himTitle:    "Dapper",
     himDesc:     "Black tuxedo · bow tie<br>waistcoat · suspenders",
     dressNote:   "Sequins, feathers &amp; pearls are highly encouraged",
-    quote:       "<span>A little party</span><span>never killed</span><span>nobody</span>",
+    quote:       "<span>A little party</span><span>never killed</span><span>somebody</span>",
     see:         "See you",
     rsvpKindly:  "Kindly respond",
     rsvpNamePh:  "Your name",
@@ -1166,6 +1214,8 @@ var I18N = {
     s2Script:    "Латифа",
     s2Eyebrow:   "Большое празднование дня рождения",
     month:       "июля",
+    doors:       "Начало в",
+    venueLabel:  "Место проведения",
     city:        "Ташкент · воскресный вечер",
     cdTitle:     "До праздника осталось",
     cdParty:     "Время праздновать!",
