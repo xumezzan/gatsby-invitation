@@ -18,13 +18,20 @@ CSS в .atmos-bg вернули на object-fit:cover (было contain — да
 
 UPSCALED SOURCE (owner прислал upscaled-video-2.mp4, 1440x2560, 24fps, 10s, со звуком):
 исходник уже скадрирован ШИРЕ прежнего — бокал не во весь кадр, воздух вокруг. Поэтому
-доп. zoom-out НЕ нужен (пробовал 0.9 — бокал мельчал зря). Пайплайн: downscale→720x1280,
-бумеранг (fwd+reverse concat) для бесшовного лупа, -an (звук убрать), CRF 28, +faststart.
-Итог ~1.65MB. Резкость заметно лучше прежнего (пузырьки/грани). scale=1.0 (без pad).
-assets/atmos-source-boomerang.mp4 — текущая апскейл-версия (источник дальнейших правок).
-Бэкапы: atmos-source-boomerang-CLOSE-backup.mp4 (самый первый крупный план),
-atmos-prev-78pct-backup.mp4 (промежуточный zoom-out 0.78 старого исходника).
-Отдалить/приблизить эту версию — менять scale в ffmpeg (+pad #0a0a0c если <1), НЕ CSS.
+доп. zoom-out НЕ нужен. Пайплайн: бумеранг (fwd+reverse concat) для бесшовного лупа,
+-an (звук убрать), +faststart. scale=1.0 (без pad).
+
+QUALITY PASS (owner: «не делай даунскейл, нужно получше качество»):
+ТЕКУЩАЯ версия — НАТИВНЫЕ 1440x2560, CRF 20, ~12.2MB. НЕ даунскейлить (прямая просьба).
+Внимание: 12MB — тяжело для Telegram-мобайла, старт видео дольше (до загрузки виден постер).
+Если понадобится легче — готов быстрый откат assets/atmos-1080-lite-fallback.mp4
+(1080x1920 CRF21 ~7.5MB): просто скопировать поверх atmos.mp4.
+Постер: НЕ нативный (был бы ~82KB base64) — сжат до 720w q5 ~30KB, только заглушка.
+assets/atmos-source-boomerang.mp4 — текущая нативная HQ версия (источник дальнейших правок).
+Бэкапы: atmos-source-boomerang-CLOSE-backup.mp4 (первый крупный план),
+atmos-prev-78pct-backup.mp4 (zoom-out 0.78 старого исходника),
+atmos-prev-720-backup.mp4 (апскейл, но даунскейл до 720 — «мыльнее», owner отверг).
+Отдалить/приблизить — менять scale в ffmpeg (+pad #0a0a0c если <1), НЕ CSS.
 
 Palette swatches (dress code): owner-supplied metallic circles (black silk+gold ring / brushed gold / brushed silver).
 Extracted from a checkerboard-bg PNG via circular alpha mask (Pillow), quantized to ~8KB each, inline base64.
