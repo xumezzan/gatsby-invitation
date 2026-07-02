@@ -21,7 +21,7 @@ CDN-зависимости (решение владельца, 07.2026, верс
 4. `.hero` — экран-афиша «12 JULY 2026 · MIRAS» (канвас `#sparkles` с боке, `.screen2`: очень крупная editorial-дата + countdown одной строкой без коробок; секций Countdown/Details больше НЕТ — их содержимое здесь)
 5. `.atmos` — экран 3 «Атмосфера вечера»: полноэкранное фоновое ВИДЕО `<video class="atmos-bg">` (налив шампанского, `atmos.mp4` рядом) с параллаксом и veil-градиентом
 6. Dress code — фешн-галерея `.looks` (2 крупных фото образов в дуотоне, вертикальные подписи For Her/For Him, параллакс) + палитра Black/Gold/Silver
-7. `.finale` — экран 5: полноэкранный тёмный финал с 2D-канвасом `#finaleSmoke` (дым + золотые блики), цитата «A little party / never killed / nobody», See you, дата → футер
+7. `.finale` — экран 5: полноэкранный тёмный финал с 2D-канвасом `#finaleSmoke` (дым + золотые блики), цитата «A little party / never killed / nobody», See you, дата, **встроенная RSVP-форма `#rsvpForm`** (имя + буду/не смогу → Google Форма) → футер
 8. `<audio id="bgm">` + кнопка `#musicToggle` → CDN-скрипты → единственный `<script>`
 
 ## Ключевые константы
@@ -72,6 +72,14 @@ Hover-зум: `.look:hover img{ transform:scale(1.07) }` под `@media (hover:h
 
 ### 10. Кнопка музыки и [hidden]
 У `.music-toggle` авторский `display:grid` перебивает браузерный `[hidden]{display:none}` — правило `.music-toggle[hidden]{display:none}` обязательно, иначе кнопка видна и без music.mp3 (баг уже чинили).
+
+### 11. RSVP — встроенная форма → Google Форма (без бэкенда)
+`#rsvpForm` в `.finale`: поле имени + radiogroup «буду/не смогу» → отправка прямо в Google Форму `fetch(RSVP_FORM, {method:'POST', mode:'no-cors', body:FormData})`. Бэкенда НЕТ, принцип «один файл» сохранён (вся форма и JS inline).
+- **5 констант** вверху блока `RSVP → GOOGLE ФОРМА` в `<script>`: `RSVP_FORM` (action-URL, оканчивается на `/formResponse`, НЕ `/viewform`), `RSVP_NAME`/`RSVP_ATTEND` (`entry.XXXX` ID полей), `RSVP_YES`/`RSVP_NO` (тексты вариантов ДОСЛОВНО как в Google Форме — Google матчит ответ по тексту). Как достать — README раздел «RSVP» (через «Создать предзаполненную ссылку»). Владелец вписывает сам (нет доступа к его Google-аккаунту).
+- **`no-cors` = opaque-ответ**: fetch не видит статус, поэтому успех = факт отправки (`.then(finish)`); в `.catch` попадает только реальный обрыв сети (тогда разблокируем кнопку, `sent=false`). Не пытаться читать `response.ok` — он недоступен.
+- **Guard плейсхолдера**: если `RSVP_FORM` не начинается с `http` (константы не заполнены) — НЕ шлём запрос, показываем `rsvpErrNet` + `console.warn`. Иначе задеплоенная с плейсхолдером форма молча слала бы мусор.
+- **i18n placeholder**: поле имени использует `data-i18n-ph` (не `data-i18n`) → `applyLang` ставит `placeholder`. Тексты/ошибки/благодарности — ключи `rsvp*` в обоих словарях; сообщения берутся по текущему `LANG` в момент отправки.
+- CSS: выбранный вариант подсвечивается через `.rsvp-opt:has(input:checked)` (нативный radio скрыт `opacity:0`). Успех → класс `.done` на форме прячет поля/кнопку, остаётся благодарность. Reduced-motion безопасно: форма стартует с `opacity:1` (не появляется из 0), только `.rsvp-status` скрыт до отправки — это состояние, не анимация.
 
 ## Стиль кода
 - JS в стиле ES5 (`var`, `function`), без модулей и транспиляции
