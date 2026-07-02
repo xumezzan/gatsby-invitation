@@ -1,0 +1,36 @@
+# Render Blueprint — статический сайт (Static Site).
+# https://render.com/docs/blueprint-spec  ·  https://render.com/docs/static-sites
+#
+# Как задеплоить:
+#   1. Запушить репозиторий на GitHub/GitLab.
+#   2. Render Dashboard → New → Blueprint → выбрать этот репозиторий.
+#      Render прочитает render.yaml и создаст Static Site автоматически.
+#   (Альтернатива без blueprint: New → Static Site, Publish Directory = ".",
+#    Build Command оставить пустым.)
+#
+# Сборки нет — сайт уже готов, публикуем корень репозитория как есть.
+# Файлы, которые обязаны лежать рядом с index.html и попасть в деплой:
+#   index.html, og-image.png, atmos.mp4 (и опционально music.mp3).
+services:
+  - type: web
+    name: latifa-invitation
+    runtime: static
+    # Билд не нужен — отдаём статику как есть. Пустая команда = ничего не собираем.
+    buildCommand: ""
+    # Публикуем корень репозитория (index.html и соседние файлы лежат в корне).
+    staticPublishPath: .
+    # Роуты не нужны: это обычная статика, "/" сам отдаёт index.html,
+    # а atmos.mp4 / og-image.png отдаются как есть. SPA-rewrite здесь только
+    # мешал бы (мог бы перехватывать пути к ассетам).
+    headers:
+      # Долгий кэш для статичных ассетов (видео, картинки).
+      - path: /atmos.mp4
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /og-image.png
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      # HTML не кэшируем надолго — чтобы правки долетали до гостей сразу.
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache
