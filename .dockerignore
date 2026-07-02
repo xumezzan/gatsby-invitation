@@ -1,0 +1,16 @@
+# В образ нужен только сам сайт и его ассеты (см. Dockerfile COPY).
+# Всё остальное — исходники, документация, конфиги — в деплой не тащим.
+.git
+.gitignore
+.DS_Store
+.cursorrules
+assets/
+CLAUDE.md
+README.md
+render.yaml
+railway.json
+Dockerfile
+.dockerignore
+*.log
+node_modules/
+.netlify/
