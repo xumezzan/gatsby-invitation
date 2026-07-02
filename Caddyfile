@@ -1,0 +1,27 @@
+# Caddy — раздача статики приглашения на Railway.
+# Слушаем порт из переменной окружения Railway ($PORT), fallback 8080 локально.
+# Билда нет — отдаём index.html и соседние файлы (og-image.png, atmos.mp4,
+# опциональный music.mp3) как есть. Кэш-заголовки — как были в render.yaml.
+{
+	# Railway сам терминирует HTTPS на своём эдже, Caddy внутри слушает HTTP.
+	auto_https off
+	admin off
+}
+
+:{$PORT:8080} {
+	root * /srv
+	encode gzip zstd
+	file_server
+
+	# Долгий неизменяемый кэш для тяжёлых ассетов (видео, картинки, музыка).
+	@immutable path /atmos.mp4 /og-image.png /music.mp3
+	header @immutable Cache-Control "public, max-age=31536000, immutable"
+
+	# HTML не кэшируем надолго — чтобы правки долетали до гостей сразу.
+	@html path /index.html /
+	header @html Cache-Control "no-cache"
+
+	# Корректные MIME-типы (Caddy обычно определяет сам, но фиксируем видео).
+	@mp4 path *.mp4
+	header @mp4 Content-Type "video/mp4"
+}

@@ -9,9 +9,10 @@
 <meta property="og:title" content="Latifa’s Great Birthday Celebration">
 <meta property="og:description" content="12 July 2026 · Miras, Tashkent · Dress code: Great Gatsby — gold, silver & black. A little party never killed nobody!">
 <meta property="og:type" content="website">
-<!-- og-image.png лежит рядом с index.html (кидать в Netlify Drop вместе, как music.mp3).
-     Ссылка относительная; после деплоя надёжнее вписать абсолютный URL:
-     https://ВАШ-САЙТ.netlify.app/og-image.png -->
+<!-- og-image.png раздаётся рядом с index.html (в Docker-образ кладётся вместе — см. Dockerfile).
+     Ссылка относительная; Telegram/WhatsApp надёжнее подтягивают превью по АБСОЛЮТНОМУ URL.
+     После деплоя вписать домен Railway, напр.:
+     https://<проект>.up.railway.app/og-image.png (или свой домен). -->
 <meta property="og:image" content="og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -1418,32 +1419,32 @@ var introFX = null;
   }
   requestAnimationFrame(loop);
 
-  /* сцены 1–3: темнота → свет по бархату → тиснение LATIFA → You're invited → кнопка */
+  /* сцены 1–3: темнота → свет по бархату → тиснение LATIFA → You're invited → кнопка (сжато — гость не должен ждать) */
   var seq = gsap.timeline()
-    .to(U.uGlow,  { value: 1, duration: 1.6, ease: 'power2.out' }, .3)
-    .to(U.uSweep, { value: 1, duration: 2.4, ease: 'power2.inOut' }, .45)
-    .to('#introName', { opacity: 1, duration: 1.6, ease: 'power2.out' }, 1.7)
-    .fromTo('#introName', { letterSpacing: '.34em' }, { letterSpacing: '.24em', duration: 2.2, ease: 'power3.out' }, 1.7)
-    .add(function(){ document.getElementById('introName').classList.add('foil'); }, 2.6)
-    .to('#introInvited', { opacity: 1, duration: 1, ease: 'power2.out' }, 2.7)
-    .to('#enterBtn', { opacity: 1, duration: 1, ease: 'power2.out' }, 3.4);
+    .to(U.uGlow,  { value: 1, duration: 1.0, ease: 'power2.out' }, .1)
+    .to(U.uSweep, { value: 1, duration: 1.6, ease: 'power2.inOut' }, .2)
+    .to('#introName', { opacity: 1, duration: 1.0, ease: 'power2.out' }, .8)
+    .fromTo('#introName', { letterSpacing: '.34em' }, { letterSpacing: '.24em', duration: 1.4, ease: 'power3.out' }, .8)
+    .add(function(){ document.getElementById('introName').classList.add('foil'); }, 1.5)
+    .to('#introInvited', { opacity: 1, duration: .7, ease: 'power2.out' }, 1.4)
+    .to('#enterBtn', { opacity: 1, duration: .7, ease: 'power2.out' }, 1.8);
 
   /* сцена 4 (по клику): занавес раздвигается — полы уезжают, в щели золотой свет, дымчатое стекло, выход */
   introFX = {
     seq: seq, /* наружу — для отладки/тестов (перемотка progress()) */
     out: function(done){
       gsap.timeline({ onComplete: done })
-        .to('#enterBtn', { opacity: 0, duration: .3 }, 0)
-        .to('#introInvited', { opacity: 0, duration: .4 }, 0)
+        .to('#enterBtn', { opacity: 0, duration: .25 }, 0)
+        .to('#introInvited', { opacity: 0, duration: .3 }, 0)
         /* имя тает в центральную световую щель — чуть вверх, лёгкое свечение */
-        .to('#introName', { opacity: 0, y: '-4%', filter: 'blur(6px)', duration: .7, ease: 'power2.in' }, .05)
+        .to('#introName', { opacity: 0, y: '-4%', filter: 'blur(6px)', duration: .5, ease: 'power2.in' }, .03)
         /* полы бархата разъезжаются, между ними ширится золотой свет */
-        .to(U.uSplit, { value: 1, duration: 1.5, ease: 'power3.inOut' }, .1)
-        .to(U.uZoom, { value: 1.06, duration: 1.6, ease: 'power2.inOut' }, .1)
+        .to(U.uSplit, { value: 1, duration: .95, ease: 'power3.inOut' }, .05)
+        .to(U.uZoom, { value: 1.06, duration: 1.0, ease: 'power2.inOut' }, .05)
         /* дымчатое стекло проступает на пике раскрытия и гаснет — переход в hero */
-        .to('#glass', { opacity: .85, duration: .6, ease: 'power2.in' }, .85)
-        .to('#intro', { opacity: 0, duration: .55, ease: 'power1.inOut' }, 1.35)
-        .to('#glass', { opacity: 0, duration: .9, ease: 'power1.out' }, 1.6);
+        .to('#glass', { opacity: .85, duration: .4, ease: 'power2.in' }, .5)
+        .to('#intro', { opacity: 0, duration: .45, ease: 'power1.inOut' }, .8)
+        .to('#glass', { opacity: 0, duration: .6, ease: 'power1.out' }, 1.0);
     }
   };
 })();
