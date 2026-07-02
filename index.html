@@ -22,7 +22,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cinzel:wght@400;500&family=Great+Vibes&family=Italiana&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant:ital,wght@1,500;1,600&family=Great+Vibes&family=Italiana&family=Jost:wght@300;400;500&family=Montserrat:wght@300;400;500&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -49,7 +49,7 @@ body{
     radial-gradient(900px 600px at 50% 110%, rgba(212,175,55,.04), transparent 60%),
     var(--bg);
   color:var(--ink);
-  font-family:'Jost',sans-serif;
+  font-family:'Jost','Montserrat',sans-serif;
   font-weight:300;
   letter-spacing:.02em;
   overflow-x:hidden;
@@ -101,7 +101,7 @@ body::after{
 body.lit .hero .gold-text{ animation:sheenSweep 2.2s ease .9s 1; }
 
 .eyebrow{
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:clamp(.72rem,2.6vw,.95rem);
   letter-spacing:.55em;
   text-indent:.55em;
@@ -115,13 +115,17 @@ body.lit .hero .gold-text{ animation:sheenSweep 2.2s ease .9s 1; }
   font-weight:400;
   letter-spacing:.02em;
 }
-/* Great Vibes без кириллицы — в RU рукописные акценты рисует Caveat (letter-spacing другой) */
+/* Great Vibes без кириллицы; casual-скрипты (Caveat и пр.) в кириллице смотрятся по-детски.
+   Элегантных формальных каллиграфий с кириллицей на Google Fonts нет — поэтому в RU
+   рукописные акценты рисует Cormorant italic: высококонтрастный, каллиграфичный, «дорогой». */
 html[lang="ru"] .script,
 html[lang="ru"] .finale-see,
 html[lang="ru"] .dress-note,
 html[lang="ru"] .atmos-line .script{
-  font-family:'Caveat',cursive;
-  letter-spacing:.005em;
+  font-family:'Cormorant',serif;
+  font-style:italic;
+  font-weight:600;
+  letter-spacing:.01em;
 }
 /* Русские uppercase-строки длиннее английских: убавляем трекинг и даём поля,
    иначе «ПРАЗДНИК В ЧЕСТЬ РОЖДЕНИЯ» вылезает за 380px (паттерн №2 — про интро,
@@ -163,7 +167,7 @@ section, header, footer{ position:relative; }
 }
 
 .section-title{
-  font-family:'Italiana',serif;
+  font-family:'Italiana','Playfair Display',serif;
   font-weight:400;
   font-size:clamp(1.6rem,5.4vw,2.6rem);
   letter-spacing:.32em;
@@ -217,7 +221,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
   margin-bottom:-10px;
 }
 .s2-eyebrow{
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(3vw,.82rem);
   letter-spacing:.55em;
   text-indent:.55em;
@@ -226,7 +230,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
   opacity:.9;
 }
 .s2-day{
-  font-family:'Italiana',serif;
+  font-family:'Italiana','Playfair Display',serif;
   font-size:min(46vw,16rem);
   line-height:.9;
   letter-spacing:.02em;
@@ -237,7 +241,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
   align-items:center;
   justify-content:center;
   gap:18px;
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(5vw,1.35rem);
   letter-spacing:.55em;
   text-indent:.55em;
@@ -253,14 +257,14 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
 }
 .s2-month::after{ background:linear-gradient(90deg, rgba(212,175,55,.7), transparent); }
 .s2-year{
-  font-family:'Italiana',serif;
+  font-family:'Italiana','Playfair Display',serif;
   font-size:min(20vw,7rem);
   line-height:1;
   letter-spacing:.08em;
   text-indent:.08em;
 }
 .s2-venue{
-  font-family:'Italiana',serif;
+  font-family:'Italiana','Playfair Display',serif;
   font-size:min(11vw,3.4rem);
   letter-spacing:.38em;
   text-indent:.38em;
@@ -268,7 +272,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
   margin-top:36px;
 }
 .s2-city{
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(2.8vw,.78rem);
   letter-spacing:.5em;
   text-indent:.5em;
@@ -281,7 +285,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
 .s2-cd{ margin-top:52px; }
 .s2-cd-label{
   display:block;
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(2.8vw,.72rem);
   letter-spacing:.5em;
   text-indent:.5em;
@@ -298,7 +302,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
 .cd-cell{ text-align:center; }
 .cd-cell b{
   display:block;
-  font-family:'Italiana',serif;
+  font-family:'Italiana','Playfair Display',serif;
   font-weight:400;
   font-size:min(9vw,2.6rem);
   line-height:1;
@@ -308,7 +312,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
 .cd-cell i{
   display:block;
   font-style:normal;
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(2.4vw,.6rem);
   letter-spacing:.32em;
   text-indent:.32em;
@@ -317,7 +321,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
   margin-top:8px;
 }
 .cd-sep{
-  font-family:'Italiana',serif;
+  font-family:'Italiana','Playfair Display',serif;
   font-size:min(6vw,1.6rem);
   color:rgba(212,175,55,.45);
   align-self:flex-start;
@@ -366,7 +370,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
   max-width:760px;
 }
 .atmos-eyebrow{
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(3vw,.8rem);
   letter-spacing:.5em; text-indent:.5em;
   text-transform:uppercase;
@@ -375,7 +379,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
   margin-bottom:20px;
 }
 .atmos-line{
-  font-family:'Italiana',serif;
+  font-family:'Italiana','Playfair Display',serif;
   font-size:min(8.5vw,2.9rem);
   line-height:1.28;
   letter-spacing:.04em;
@@ -416,7 +420,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
 .swatch.silver i{ background-image:url(data:image/png;base64,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); }
 .swatch em{
   font-style:normal;
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:.72rem;
   letter-spacing:.4em;
   text-indent:.4em;
@@ -470,7 +474,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
 .look-vert{
   position:absolute; top:14px; left:14px; z-index:2;
   writing-mode:vertical-rl; text-orientation:mixed;
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(3.4vw,.82rem);
   letter-spacing:.42em;
   text-transform:uppercase;
@@ -483,13 +487,13 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
   text-align:center;
 }
 .look-cap h3{
-  font-family:'Italiana',serif;
+  font-family:'Italiana','Playfair Display',serif;
   font-weight:400;
   font-size:min(7vw,1.9rem);
   letter-spacing:.14em; text-indent:.14em;
 }
 .look-cap p{
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(3vw,.72rem);
   letter-spacing:.24em;
   text-transform:uppercase;
@@ -527,7 +531,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
 }
 .finale-inner{ position:relative; z-index:1; max-width:820px; }
 .finale-quote{
-  font-family:'Italiana',serif;
+  font-family:'Italiana','Playfair Display',serif;
   font-weight:400;
   font-size:min(11vw,3.8rem);
   line-height:1.16;
@@ -543,7 +547,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
   margin-top:30px;
 }
 .finale-date{
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(3.4vw,.88rem);
   letter-spacing:.5em; text-indent:.5em;
   text-transform:uppercase;
@@ -554,7 +558,7 @@ body.lit .screen2 > *{ opacity:1; transform:none; }
 footer{
   padding:34px 20px 46px;
   text-align:center;
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:.7rem;
   letter-spacing:.45em;
   text-indent:.45em;
@@ -593,7 +597,7 @@ body.intro-lock{ overflow:hidden; }
 
 /* имя — «золотое тиснение»: капс Italiana + фольга .gold-text; размеры только min(vw,rem) (паттерн №2) */
 .intro-name-caps{
-  font-family:'Italiana',serif;
+  font-family:'Italiana','Playfair Display',serif;
   font-size:min(12.5vw,5.4rem);   /* влезает в ар-деко рамку с полями */
   line-height:1.12;
   letter-spacing:.24em; text-indent:.24em;
@@ -603,7 +607,7 @@ body.intro-lock{ overflow:hidden; }
 .intro-name-caps.foil{ animation:sheenSweep 2.4s ease 1; } /* металлический блик по тиснению */
 
 .intro-invited{
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(3.4vw,.95rem);
   letter-spacing:.6em; text-indent:.6em;
   text-transform:uppercase;
@@ -616,7 +620,7 @@ body.intro-lock{ overflow:hidden; }
 .open-inv{
   margin-top:52px;
   cursor:pointer;
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(3.4vw,.92rem);
   letter-spacing:.42em; text-indent:.42em;
   text-transform:uppercase;
@@ -685,7 +689,7 @@ body.intro-lock{ overflow:hidden; }
 
 /* ---------- RSVP (финал): встроенная форма имя + буду/не смогу ---------- */
 .rsvp-eyebrow{
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(3vw,.74rem);
   letter-spacing:.42em; text-indent:.42em;
   text-transform:uppercase;
@@ -702,7 +706,7 @@ body.intro-lock{ overflow:hidden; }
 /* поле имени — тонкая деко-рамка, прозрачный фон */
 .rsvp-input{
   width:100%;
-  font-family:'Jost',sans-serif; font-weight:300;
+  font-family:'Jost','Montserrat',sans-serif; font-weight:300;
   font-size:1rem; text-align:center;
   color:var(--gold-soft);
   background:rgba(212,175,55,.05);
@@ -721,7 +725,7 @@ body.intro-lock{ overflow:hidden; }
 .rsvp-choice{ display:flex; gap:12px; width:100%; }
 .rsvp-opt{
   flex:1; cursor:pointer; position:relative;
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(3vw,.72rem);
   letter-spacing:.16em; text-indent:.16em;
   text-transform:uppercase;
@@ -746,7 +750,7 @@ body.intro-lock{ overflow:hidden; }
 .rsvp-btn{
   display:inline-block;
   cursor:pointer;
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(3.4vw,.92rem);
   letter-spacing:.42em; text-indent:.42em;
   text-transform:uppercase;
@@ -775,7 +779,7 @@ body.intro-lock{ overflow:hidden; }
 /* строка статуса под формой (ошибка/спасибо) */
 .rsvp-status{
   min-height:1.2em;
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   font-size:min(3vw,.74rem);
   letter-spacing:.14em; text-indent:.14em;
   color:var(--gold-soft);
@@ -834,7 +838,7 @@ body.intro-lock{ overflow:hidden; }
   background:rgba(10,10,12,.85);
   border:1px solid var(--line);
   border-radius:18px;
-  font-family:'Cinzel',serif;
+  font-family:'Cinzel','Playfair Display',serif;
   cursor:pointer;
   transition:box-shadow .3s;
 }
@@ -1108,7 +1112,9 @@ body.intro-lock{ overflow:hidden; }
    Дефолт — английский (Гэтсби-эстетика). Выбор гостя хранится в localStorage.
    Каждый текстовый узел помечен data-i18n (textContent) или data-i18n-html (innerHTML,
    если внутри есть разметка — span/br/script-акцент). Скрипт-строки (Latifa's, See you)
-   в RU рисует Caveat — Great Vibes без кириллицы (см. CSS html[lang="ru"] .script). */
+   в RU рисует Cormorant italic — Great Vibes без кириллицы, а casual-скрипты по-детски
+   (см. CSS html[lang="ru"] .script). Кириллица под Italiana/Cinzel/Jost — фолбэк
+   Playfair Display / Montserrat в стеках font-family (латиница = EN без изменений). */
 var I18N = {
   en: {
     invited:     "You’re invited",
