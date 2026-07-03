@@ -1112,10 +1112,10 @@ body.intro-lock{ overflow:hidden; }
     <div class="finale-date">12 . 07 . 2026</div>
 
     <!-- ===== RSVP =====
-         Встроенная форма: имя + буду/не смогу → отправляется в Google Форму
-         через fetch (см. блок RSVP в <script> внизу; там же константы
-         FORM_ACTION_URL / ENTRY_NAME / ENTRY_ATTEND — впишите свои значения
-         из Google Формы, инструкция в README.md). Бэкенд не нужен. -->
+         Встроенная форма: имя + буду/не смогу → отправляется в Google Таблицу
+         через веб-приложение Apps Script (fetch, см. блок RSVP в <script> внизу;
+         там константа RSVP_FORM — URL веб-приложения /exec; как опубликовать
+         скрипт — README.md, раздел «RSVP»). Бэкенд не нужен. -->
     <div class="rsvp-eyebrow" data-i18n="rsvpKindly">Kindly respond</div>
     <form id="rsvpForm" class="rsvp" novalidate>
       <input id="rsvpName" class="rsvp-input" type="text" name="name"
@@ -1788,21 +1788,17 @@ musicBtn.addEventListener('click', function(){
   else { bgm.pause(); setMusicIcon(false); }
 });
 
-/* ================= RSVP → GOOGLE ФОРМА =================
-   Встроенная форма шлёт ответ прямо в Google Форму, без бэкенда.
-   ВПИШИТЕ ТРИ ЗНАЧЕНИЯ из своей Google Формы (как их достать — README.md):
+/* ================= RSVP → GOOGLE ТАБЛИЦА (Apps Script) =================
+   Встроенная форма шлёт ответ прямо в Google-таблицу через веб-приложение
+   Apps Script (doPost), без бэкенда и без Google Формы.
 
-   RSVP_FORM   — action-URL формы, оканчивается на /formResponse
-                 (пример: https://docs.google.com/forms/d/e/AAA.../formResponse)
-   RSVP_NAME   — entry.XXXXXXX поля «Имя»
-   RSVP_ATTEND — entry.XXXXXXX поля «Придёте?»
-   RSVP_YES / RSVP_NO — тексты вариантов ИМЕННО как в Google Форме
-                 (Google принимает ответ по совпадению текста варианта). */
-var RSVP_FORM   = 'RSVP_FORM_ACTION_URL';   /* ← вставить: .../formResponse */
-var RSVP_NAME   = 'entry.RSVP_NAME_ID';     /* ← вставить: entry.XXXXXXX (имя) */
-var RSVP_ATTEND = 'entry.RSVP_ATTEND_ID';   /* ← вставить: entry.XXXXXXX (придёте?) */
-var RSVP_YES    = 'Yes';                     /* ← текст варианта «да» как в форме */
-var RSVP_NO     = 'No';                      /* ← текст варианта «нет» как в форме */
+   RSVP_FORM   — URL веб-приложения Apps Script, оканчивается на /exec
+                 (Deploy → Web app → Anyone; код скрипта — в README.md).
+                 Скрипт кладёт строку: Дата · Имя · Присутствие (Да/Нет).
+   RSVP_YES / RSVP_NO — тексты, которые попадут в колонку «Присутствие». */
+var RSVP_FORM = 'https://script.google.com/macros/s/AKfycbxGbozZeP7nq4PW0NypQBPL9D2XgeUGQeGEt1xKabZ9tnCHrgxYAFkgwysF9NuI1Yy5/exec';
+var RSVP_YES  = 'Да';   /* текст в таблице для «буду» */
+var RSVP_NO   = 'Нет';  /* текст в таблице для «не смогу» */
 
 (function(){
   var form = document.getElementById('rsvpForm');
@@ -1827,17 +1823,20 @@ var RSVP_NO     = 'No';                      /* ← текст варианта 
     if (!name){ say('rsvpErrName', true); nameEl.focus(); return; }
     if (!picked){ say('rsvpErrPick', true); return; }
 
-    /* защита от отправки с незаполненными константами (плейсхолдер на месте) */
+    /* защита от отправки с незаполненной константой (плейсхолдер на месте) */
     if (RSVP_FORM.indexOf('http') !== 0){
-      console.warn('RSVP: заполните RSVP_FORM / RSVP_NAME / RSVP_ATTEND — см. README.md');
+      console.warn('RSVP: заполните RSVP_FORM (URL Apps Script /exec) — см. README.md');
       say('rsvpErrNet', true);
       return;
     }
 
     var attendText = picked.value === 'yes' ? RSVP_YES : RSVP_NO;
-    var data = new FormData();
-    data.append(RSVP_NAME, name);
-    data.append(RSVP_ATTEND, attendText);
+    /* тело как application/x-www-form-urlencoded (URLSearchParams) — Apps Script
+       надёжно кладёт это в e.parameter; content-type остаётся CORS-safe для no-cors.
+       НЕ использовать FormData: он шлёт multipart, который Apps Script парсит иначе. */
+    var data = new URLSearchParams();
+    data.append('name', name);
+    data.append('attend', attendText);
 
     sent = true;
     btn.setAttribute('disabled', '');
@@ -1865,7 +1864,7 @@ var RSVP_NO     = 'No';                      /* ← текст варианта 
       document.body.appendChild(ifr);
       var f = document.createElement('form');
       f.action = RSVP_FORM; f.method = 'POST'; f.target = 'rsvp_sink';
-      [[RSVP_NAME, name],[RSVP_ATTEND, attendText]].forEach(function(p){
+      [['name', name],['attend', attendText]].forEach(function(p){
         var inp = document.createElement('input');
         inp.type = 'hidden'; inp.name = p[0]; inp.value = p[1];
         f.appendChild(inp);

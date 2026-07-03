@@ -21,7 +21,7 @@ CDN-зависимости (решение владельца, 07.2026, верс
 4. `.hero` — экран-афиша «12 JULY 2026 · MIRAS» (канвас `#sparkles` с боке, `.screen2`: очень крупная editorial-дата + countdown одной строкой без коробок; секций Countdown/Details больше НЕТ — их содержимое здесь)
 5. `.atmos` — экран 3 «Атмосфера вечера»: полноэкранное фоновое ВИДЕО `<video class="atmos-bg">` (налив шампанского, `atmos.mp4` рядом) с параллаксом и veil-градиентом
 6. Dress code — фешн-галерея `.looks` (2 крупных фото образов в дуотоне, вертикальные подписи For Her/For Him, параллакс) + палитра Black/Gold/Silver
-7. `.finale` — экран 5: полноэкранный тёмный финал с 2D-канвасом `#finaleSmoke` (дым + золотые блики), цитата «A little party / never killed / nobody», See you, дата, **встроенная RSVP-форма `#rsvpForm`** (имя + буду/не смогу → Google Форма) → футер
+7. `.finale` — экран 5: полноэкранный тёмный финал с 2D-канвасом `#finaleSmoke` (дым + золотые блики), цитата «A little party / never killed / nobody», See you, дата, **встроенная RSVP-форма `#rsvpForm`** (имя + буду/не смогу → Google Таблица через Apps Script) → футер
 8. `<audio id="bgm">` + кнопка `#musicToggle` → CDN-скрипты → единственный `<script>`
 
 ## Ключевые константы
@@ -73,11 +73,13 @@ Hover-зум: `.look:hover img{ transform:scale(1.07) }` под `@media (hover:h
 ### 10. Кнопка музыки и [hidden]
 У `.music-toggle` авторский `display:grid` перебивает браузерный `[hidden]{display:none}` — правило `.music-toggle[hidden]{display:none}` обязательно, иначе кнопка видна и без music.mp3 (баг уже чинили).
 
-### 11. RSVP — встроенная форма → Google Форма (без бэкенда)
-`#rsvpForm` в `.finale`: поле имени + radiogroup «буду/не смогу» → отправка прямо в Google Форму `fetch(RSVP_FORM, {method:'POST', mode:'no-cors', body:FormData})`. Бэкенда НЕТ, принцип «один файл» сохранён (вся форма и JS inline).
-- **5 констант** вверху блока `RSVP → GOOGLE ФОРМА` в `<script>`: `RSVP_FORM` (action-URL, оканчивается на `/formResponse`, НЕ `/viewform`), `RSVP_NAME`/`RSVP_ATTEND` (`entry.XXXX` ID полей), `RSVP_YES`/`RSVP_NO` (тексты вариантов ДОСЛОВНО как в Google Форме — Google матчит ответ по тексту). Как достать — README раздел «RSVP» (через «Создать предзаполненную ссылку»). Владелец вписывает сам (нет доступа к его Google-аккаунту).
-- **`no-cors` = opaque-ответ**: fetch не видит статус, поэтому успех = факт отправки (`.then(finish)`); в `.catch` попадает только реальный обрыв сети (тогда разблокируем кнопку, `sent=false`). Не пытаться читать `response.ok` — он недоступен.
-- **Guard плейсхолдера**: если `RSVP_FORM` не начинается с `http` (константы не заполнены) — НЕ шлём запрос, показываем `rsvpErrNet` + `console.warn`. Иначе задеплоенная с плейсхолдером форма молча слала бы мусор.
+### 11. RSVP — встроенная форма → Google Таблица через Apps Script (без бэкенда)
+`#rsvpForm` в `.finale`: поле имени + radiogroup «буду/не смогу» → отправка на веб-приложение Apps Script `fetch(RSVP_FORM, {method:'POST', mode:'no-cors', body:URLSearchParams})`, которое `doPost` дописывает строку **Дата · Имя · Присутствие** в связанную Google Таблицу. Бэкенда НЕТ, принцип «один файл» сохранён (вся форма и JS inline). Google Форма-посредник УБРАНА (владелец 07.2026: хотел «просто таблицу»); полный код скрипта (`doPost` + `ensureHeader` + `setupSheet`) — в README раздел «RSVP». Скрипт при первом ответе на пустом листе сам ставит шапку `Дата · Имя · Придёт` и закрепляет строку 1 (`ensureHeader`); `setupSheet` — ручной запуск для оформления сразу.
+- **3 константы** вверху блока `RSVP → GOOGLE ТАБЛИЦА (Apps Script)` в `<script>`: `RSVP_FORM` (URL веб-приложения, оканчивается на `/exec`, НЕ `/macros/library/…`), `RSVP_YES`/`RSVP_NO` (тексты, попадающие в колонку «Присутствие» — `Да`/`Нет`). Больше НЕ `entry.XXXX` (это было для Google Формы). Владелец публикует скрипт и вписывает URL сам (нет доступа к его Google-аккаунту).
+- **Тело = `URLSearchParams`, НЕ `FormData`**: URLSearchParams даёт `application/x-www-form-urlencoded` — Apps Script надёжно кладёт его в `e.parameter.name`/`e.parameter.attend`; content-type CORS-safe для no-cors. FormData шлёт multipart, который Apps Script парсит иначе (проверено: urlencoded точно работает).
+- **`no-cors` = opaque-ответ**: fetch не видит статус, поэтому успех = факт отправки (`.then(finish)`); в `.catch` попадает только реальный обрыв сети (тогда разблокируем кнопку, `sent=false`). Не пытаться читать `response.ok` — он недоступен. При успешном POST Apps Script отвечает 302-редиректом на `/macros/echo?...&lib=...` — это НОРМА (строка уже записана до редиректа); `lib=` в адресе и curl-405 на финальном хопе НЕ означают ошибку (ловили это заблуждение при отладке).
+- **Guard плейсхолдера**: если `RSVP_FORM` не начинается с `http` (константа не заполнена) — НЕ шлём запрос, показываем `rsvpErrNet` + `console.warn`. Иначе задеплоенная с плейсхолдером форма молча слала бы мусор.
+- **Частая ошибка деплоя**: если при публикации выбран тип «Библиотека» вместо «Веб-приложение» — URL получается `/macros/library/d/…`, POST не исполняет `doPost`. Нужен именно тип «Веб-приложение», доступ «Все», при правках кода — «Новая версия» деплоя.
 - **i18n placeholder**: поле имени использует `data-i18n-ph` (не `data-i18n`) → `applyLang` ставит `placeholder`. Тексты/ошибки/благодарности — ключи `rsvp*` в обоих словарях; сообщения берутся по текущему `LANG` в момент отправки.
 - CSS: выбранный вариант подсвечивается через `.rsvp-opt:has(input:checked)` (нативный radio скрыт `opacity:0`). Успех → класс `.done` на форме прячет поля/кнопку, остаётся благодарность. Reduced-motion безопасно: форма стартует с `opacity:1` (не появляется из 0), только `.rsvp-status` скрыт до отправки — это состояние, не анимация.
 
@@ -116,4 +118,5 @@ Hover-зум: `.look:hover img{ transform:scale(1.07) }` под `@media (hover:h
 
 ## Открытые задачи
 См. TODO в README.md: время начала, адрес Miras, music.mp3, регресс-чек на телефоне, абсолютный URL og-image после деплоя.
-Бэклог: RSVP (Telegram-бот / Google Form), .ics «Add to calendar», деплой через gh CLI (репозиторий + Netlify/Pages) по команде владельца.
+RSVP готов: форма → Google Таблица через Apps Script (паттерн №11), скрипт опубликован, отправка проверена.
+Бэклог: .ics «Add to calendar», деплой через gh CLI (репозиторий + Netlify/Pages) по команде владельца.
