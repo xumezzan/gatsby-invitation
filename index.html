@@ -643,6 +643,17 @@ body.intro-lock{ overflow:hidden; }
 }
 .intro-name-caps.foil{ animation:sheenSweep 2.4s ease 1; } /* металлический блик по тиснению */
 
+/* подзаголовок под именем — «18th Birthday Celebration», Cinzel-деко-строка */
+.intro-subtitle{
+  font-family:'Cinzel','Playfair Display',serif;
+  font-size:min(3.6vw,1.05rem);
+  letter-spacing:.38em; text-indent:.38em;
+  text-transform:uppercase;
+  color:var(--gold-soft);
+  margin-top:14px;
+  opacity:0;
+}
+
 .intro-invited{
   font-family:'Cinzel','Playfair Display',serif;
   font-size:min(3.4vw,.95rem);
@@ -840,6 +851,7 @@ body.intro-lock{ overflow:hidden; }
 
 /* fallback без WebGL/GSAP (класс no-fx вешает JS): CSS-анимации появления, клик — затухание */
 #intro.no-fx .intro-name-caps{ animation:fadeUp 1.2s ease .4s forwards; }
+#intro.no-fx .intro-subtitle{ animation:fadeUp 1s ease .85s forwards; }
 #intro.no-fx .intro-invited{ animation:fadeUp 1s ease 1.1s forwards; }
 #intro.no-fx .open-inv{ animation:fadeUp 1s ease 1.7s forwards, invitePulse 2.8s ease-in-out 3.2s infinite; }
 /* декор без WebGL: чистый фейд без сдвига (рамку не дёргаем) */
@@ -896,7 +908,7 @@ body.intro-lock{ overflow:hidden; }
 }
 
 @media (prefers-reduced-motion:reduce){
-  .intro-name-caps,.intro-invited,.open-inv{ opacity:1; }
+  .intro-name-caps,.intro-subtitle,.intro-invited,.open-inv{ opacity:1; }
   .intro-frame,.ideco-fan{ opacity:1; }        /* декор без анимации — сразу виден */
   #veil,.open-inv .glint{ display:none; }
   #intro.open{ display:none; }
@@ -969,6 +981,7 @@ body.intro-lock{ overflow:hidden; }
   <div class="intro-content">
     <svg class="ideco ideco-fan fan-top" viewBox="-156 -186 312 240" aria-hidden="true"><use href="#dfan"/></svg>
     <div id="introName" class="intro-name-caps gold-text">LATIFA</div>
+    <div id="introSubtitle" class="intro-subtitle" data-i18n="introSubtitle">18th Birthday Party</div>
     <div id="introInvited" class="intro-invited" data-i18n="invited">You&rsquo;re invited</div>
     <button id="enterBtn" class="open-inv" type="button" data-i18n="enter">Open the invitation</button>
     <svg class="ideco ideco-fan fan-bot" viewBox="-156 -186 312 240" aria-hidden="true"><use href="#dfan"/></svg>
@@ -1163,6 +1176,7 @@ body.intro-lock{ overflow:hidden; }
    Playfair Display / Montserrat в стеках font-family (латиница = EN без изменений). */
 var I18N = {
   en: {
+    introSubtitle:"18th Birthday Party",
     invited:     "You’re invited",
     enter:       "Open the invitation",
     s2Script:    "Latifa’s",
@@ -1209,6 +1223,7 @@ var I18N = {
     footer:      "12 . 07 . 2026 · Miras · Tashkent"
   },
   ru: {
+    introSubtitle:"Праздник 18-летия",
     invited:     "Вы приглашены",
     enter:       "Открыть приглашение",
     s2Script:    "Латифа",
@@ -1719,6 +1734,7 @@ var introFX = null;
     .to('#introName', { opacity: 1, duration: 1.0, ease: 'power2.out' }, .8)
     .fromTo('#introName', { letterSpacing: '.34em' }, { letterSpacing: '.24em', duration: 1.4, ease: 'power3.out' }, .8)
     .add(function(){ document.getElementById('introName').classList.add('foil'); }, 1.5)
+    .to('#introSubtitle', { opacity: 1, duration: .7, ease: 'power2.out' }, 1.3)
     .to('#introInvited', { opacity: 1, duration: .7, ease: 'power2.out' }, 1.4)
     .to('#enterBtn', { opacity: 1, duration: .7, ease: 'power2.out' }, 1.8);
 
@@ -1729,6 +1745,7 @@ var introFX = null;
       gsap.timeline({ onComplete: done })
         .to('#enterBtn', { opacity: 0, duration: .25 }, 0)
         .to('#introInvited', { opacity: 0, duration: .3 }, 0)
+        .to('#introSubtitle', { opacity: 0, duration: .3 }, 0)
         /* имя тает в центральную световую щель — чуть вверх, лёгкое свечение */
         .to('#introName', { opacity: 0, y: '-4%', filter: 'blur(6px)', duration: .5, ease: 'power2.in' }, .03)
         /* полы бархата разъезжаются, между ними ширится золотой свет */
